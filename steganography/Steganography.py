@@ -1,10 +1,13 @@
 import numpy
+import numpy as np
 from PIL import Image
 import openpyxl
 import json
 import math
 import multiprocessing
 from scipy.fft import dctn
+import cv2
+
 
 def set_bit(v, index, x):
     mask = 1 << index
@@ -50,7 +53,12 @@ def dctOfWindow(window, m, n):
     #                 s += mat[k][l] * math.cos((2 * k + 1) * i * math.pi / (2 * 8)) * math.cos(
     #                     (2 * l + 1) * j * math.pi / (2 * 8))
     #         dct[i][j] = ci * cj * s
-    d = dctn(window['window'])
+    # d = dctn(window['window'])
+    d = cv2.dct(np.float32(window['window']))
+    # print(d)
+    # # print(dctn(window['window']))
+    # print(window['window'])
+    # exit(1)
     return 255 if d[m[0]][m[1]] > d[n[0]][n[1]] else 0
 
 def getKeys():
@@ -106,20 +114,8 @@ class Steganography:
         return self
 
 if __name__ == "__main__":
-    mat = [[23490, 23490, 23490, 23490, 23490, 23490, 23780, 23780],
-           [23490, 23490, 23490, 23490, 23490, 23490, 23780, 23780],
-           [23490, 23490, 23490, 23490, 23490, 23490, 23780, 23780],
-           [23490, 23490, 23490, 23490, 23490, 23490, 23780, 23780],
-           [23490, 23490, 23490, 23490, 23490, 23490, 23780, 23780],
-           [23490, 23490, 23490, 23490, 23490, 23490, 23780, 23780],
-           [23490, 23490, 23490, 23490, 23490, 23490, 23780, 23780],
-           [23490, 23490, 23490, 23490, 23490, 23490, 23780, 23780]]
-    print(dctn(mat))
-
     path = './stgImage_981531027_pixelA_6_5_pixelB_5_7.png'
-    # findPasswordByDctParallel(Image.open(path),(5, 4), (4, 6)).save('DCT_decrypted.png')
-    # Steganography(path).findPasswordByDct((6, 5), (5, 7)).save('DCT_decrypted.png')
-    Steganography(path).findPasswordByDct((5, 4), (4, 6)).save('DCT_decrypted.png')
+    Steganography(path).findPasswordByDct((4, 5), (6, 4)).save('DCT_decrypted.png')
 
 # keys = getKeys()
 # Steganography('./stgImageB1_981531027_R.png').findPasswordLsb(keys['x'], keys['y']).save('LSB_decrypted.png')
