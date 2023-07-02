@@ -114,8 +114,16 @@ class Steganography:
         return self
 
 if __name__ == "__main__":
-    path = './stgImage_981531027_pixelA_6_5_pixelB_5_7.png'
-    Steganography(path).findPasswordByDct((4, 5), (6, 4)).save('DCT_decrypted.png')
+    from scipy.io import loadmat
+
+    d = loadmat('./keyX_keyY_991531041(4)(1)(1).mat')
+    x = d['keyX']
+    y = d['keyY']
+
+    Steganography('./stgImageB1_991531041_R (1).png').setPasswordLsb('./image-1200x1600.png', x,y).save(
+        'siavash.png')
+    # path = './stgImage_981531027_pixelA_6_5_pixelB_5_7.png'
+    # Steganography(path).findPasswordByDct((4, 5), (6, 4)).save('DCT_decrypted.png')
 
 # keys = getKeys()
 # Steganography('./stgImageB1_981531027_R.png').findPasswordLsb(keys['x'], keys['y']).save('LSB_decrypted.png')
